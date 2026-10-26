@@ -1,0 +1,343 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Underdesk Rat Club — Background & Pencil Fix</title>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #f4e5c4;
+  color: #ffffff;
+  font-family: "Patrick Hand", cursive;
+}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#hud{position:fixed;top:0;left:0;right:0;display:none;gap:10px;align-items:flex-start;padding:clamp(8px,2vw,20px);pointer-events:none}.box{
+  background:transparent;
+  border:none;
+  border-radius:0;
+  padding:0;
+  box-shadow:none;
+  min-width:55px;
+  color:#ffffff;
+}.box small{
+  display:block;
+  font-family:"Patrick Hand",cursive;
+  font-size:16px;
+  font-weight:400;
+  letter-spacing:0;
+  color:#ffffff;
+  text-transform:none;
+}.box strong{
+  font-family:"Patrick Hand",cursive;
+  font-size:clamp(20px,2vw,28px);
+  font-weight:400;
+  color:#ffffff;
+}#hearts{height:27px;display:flex;gap:3px;align-items:center}#hearts img{width:24px;height:24px;object-fit:contain;image-rendering:pixelated}#status{
+  position:fixed;
+  right:clamp(12px,2vw,24px);
+  bottom:clamp(12px,2vw,24px);
+  margin:0;
+  max-width:350px;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  padding:0;
+  color:#ffffff;
+  font-family:"Patrick Hand",cursive;
+  font-weight:400;
+  font-size:clamp(16px,1.8vw,23px);
+  text-align:right;
+  text-shadow:1px 1px 3px #49382b;
+}
+#menu{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+background-color:#f4e5c4;
+background-image:url("assets/menu.png");
+background-position:center;
+background-size:contain;
+background-repeat:no-repeat;
+}
+#pause{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background-color:#f4e5c4;
+background-image:url("assets/pause.png");
+background-position:center;
+background-size:contain;
+background-repeat:no-repeat;
+}.card{
+  position:relative;
+  width:min(760px,100%);
+  max-height:96vh;
+  overflow:auto;
+  text-align:center;
+  background:transparent;
+  border:none;
+  border-radius:0;
+  padding:clamp(18px,4vw,36px);
+  box-shadow:none;
+  color:#60452f;
+}.sticker{position:absolute;right:15px;top:12px;width:clamp(54px,9vw,92px);image-rendering:pixelated;transform:rotate(7deg)}.kicker{font-size:11px;font-weight:900;letter-spacing:.19em;text-transform:uppercase;color:#88725b}h1{font-size:clamp(34px,7vw,64px);line-height:.9;letter-spacing:-.06em;margin:13px auto;max-width:600px}.sub{max-width:500px;margin:0 auto 12px;color:#75604a;line-height:1.45}.hero-rats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: clamp(100px, 18vh, 165px);
+  margin: 10px auto;
+}
+
+.hero-rats img {
+  width: 48%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;text-align:left;margin:14px 0}.rule {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 10px;
+  font-size: 12px;
+  line-height: 1.45;
+}.rule b{display:block;font-size:13px;margin-bottom:4px}kbd{font:400 16px "Patrick Hand",cursive;background:#fff;border:1px solid #c7b18d;border-bottom:3px solid #c7b18d;border-radius:5px;padding:3px 7px}.keys{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:10px 0 17px}button {
+  font-family: "Patrick Hand", cursive, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  background: transparent;
+  border: 2px solid #49382b;
+  border-radius: 0;
+  padding: 12px 20px;
+  color: #60452f;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+button:active {
+  transform: none;
+  box-shadow: none;
+}
+
+.secondary {
+  background: transparent;
+}.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}#pause{display:none;background:#f4e5c4c9}.pausecard{
+  max-width:430px;
+  background:transparent;
+  border:none;
+  border-radius:0;
+  padding:28px;
+  text-align:center;
+  box-shadow:none;
+  color:#60452f;
+}.pausecard h2{font-size:32px;margin:0 0 8px}#mobile{display:none;position:fixed;bottom:12px;left:0;right:0;justify-content:space-between;padding:0 12px;pointer-events:none}#mobile button{pointer-events:auto;padding:14px 17px;background:#fff8e9ed}@media(max-width:600px){.rules{grid-template-columns:1fr}.rule:nth-child(3){display:none}.card{padding:18px}.hero{height:80px}h1{max-width:80%}}@media(pointer:coarse){#mobile{display:flex}}
+</style></head><body>
+<canvas id="game"></canvas>
+<div id="hud"><div class="box"><small>Score</small><strong id="score">0</strong></div><div class="box"><small>Best</small><strong id="best">0</strong></div><div class="box"><small>Lives</small><div id="hearts"></div></div><div class="box"><small>Cheese</small><strong id="cheese">0</strong></div><div id="status">Clock in, tiny employee.</div></div>
+<div id="menu"><section class="card"><img class="sticker" src="assets/sticky_note.png" alt=""><div class="hero-rats">
+  <img src="assets/mainrat.png" alt="Main rat">
+  <img src="assets/apull.png" alt="half-eaten apple">
+</div><div class="rules"><div class="rule"><b>↔ Scoot</b>Use <kbd>A</kbd>/<kbd>D</kbd> or arrow keys to dodge the falling desk junk.</div><div class="rule"><b>⏸ Become da furniture</b>When the shadow appears, hold <kbd>SPACE</kbd>. Dont rat out now twin.</div><div class="rule"><b>🧀cheesie</b>Cheesiese's gives points. Clippies protect you. Candih changes the pace. Coffee is… cawffee.</div></div><div class="keys"><kbd>←</kbd><kbd>→</kbd><kbd>A</kbd><kbd>D</kbd><kbd>SPACE: FREEZE</kbd><kbd>P: PAUSE</kbd></div><div class="actions"><button id="start">start</button><button class="secondary" id="sound">♫ Sound on</button></div><p style="font-size:11px;color:#ffffff;margin:15px 0 0">This game was made in one day.</p></section></div>
+<div id="pause"><div class="pausecard"><h2>game paused.</h2><p>Your cheezies are waiting.</p><button id="resume">claim cheezies</button> <button class="secondary" id="toMenu">Main menu</button></div></div>
+<div id="mobile"><button id="left">← Scoot</button><button id="freeze">HOLD TO FREEZE</button><button id="right">Scoot →</button></div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),canvas=$('game'),ctx=canvas.getContext('2d');const names=['sticky_note.png','Candy_red.png','Candy_blue.png','Candy_yellow.png','pen_black.png','pen.png','pencil.png','paperclip_green.png','paperclip_red.png','paperclip_blue.png','cofficus.png','cheesicus.png','Hearticcus.png','ratticus.png','shield.png','clock.png'],img={};names.forEach(n=>{img[n]=new Image();img[n].src='assets/'+n});const backgroundImage=new Image();backgroundImage.src='assets/background.png';
+let W=innerWidth,H=innerHeight,dpr=1;function resize(){W=innerWidth;H=innerHeight;dpr=Math.min(devicePixelRatio||1,2);canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);rat.y = H * 0.80;
+rat.w = Math.min(280, W * 0.32);
+rat.h = rat.w * (125 / 440);}addEventListener('resize',resize);
+let mode='menu',keys={},touch={left:false,right:false,freeze:false},elapsed=0,score=0,best=+(localStorage.getItem('udrc-best')||0),lives=3,cheese=0,items=[],texts=[],bits=[],spawn=0,shadow=7,warning=false,human=false,hAge=0,need=1,slow=0,shield=0,invuln=0,last=0,soundOn=true,audio=null,master=null,music=null,musicStep=0;
+const rat={
+  x: W / 2,
+  y: H * 0.8,
+  w: 220,
+  h: 220 * (125 / 440),
+  vx: 0,
+  face: -1
+};
+const rand=(a,b)=>a+Math.random()*(b-a),clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+function drawImg(n, x, y, w, h, r = 0, flipX = false) {
+  const im = img[n];
+  if (!im || !im.complete || !im.naturalWidth) return;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(r);
+  if (flipX) ctx.scale(-1, 1);
+  ctx.drawImage(im, -w / 2, -h / 2, w, h);
+  ctx.restore();
+}
+function audioStart(){if(audio){audio.resume();return}let AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audio=new AC();master=audio.createGain();master.gain.value=soundOn?0.45:0;master.connect(audio.destination);music=setInterval(()=>{if (
+  (mode !== 'playing' && mode !== 'menu') ||
+  !soundOn ||
+  audio.state !== 'running'
+) {
+  return;
+}let now=audio.currentTime,seq=[0,3,7,10,7,3,5,2,0,3,8,7,5,3,2,-2],root=[146.83,130.81,164.81,146.83][Math.floor(elapsed/12)%4],freq=root*2**(seq[musicStep++%seq.length]/12),o=audio.createOscillator(),g=audio.createGain(),f=audio.createBiquadFilter();o.type='triangle';o.frequency.value=freq;f.type='lowpass';f.frequency.value=1200;g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.0001,now+.23);o.connect(f);f.connect(g);g.connect(master);o.start(now);o.stop(now+.24);if(musicStep%4===0){let b=audio.createOscillator(),bg=audio.createGain();b.frequency.value=root/2;bg.gain.setValueAtTime(.06,now);bg.gain.exponentialRampToValueAtTime(.0001,now+.13);b.connect(bg);bg.connect(master);b.start(now);b.stop(now+.14)}},250)}
+function beep(f=500,d=.1,type='sine'){if(!audio||!soundOn||audio.state!=='running')return;let o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(.06,audio.currentTime);g.gain.exponentialRampToValueAtTime(.0001,audio.currentTime+d);o.connect(g);g.connect(master);o.start();o.stop(audio.currentTime+d+.02)}
+function status(s){$('status').textContent=s}function hud(){$('score').textContent=Math.floor(score).toLocaleString();$('best').textContent=Math.max(best,Math.floor(score)).toLocaleString();$('cheese').textContent=cheese;$('hearts').innerHTML='';for(let i=0;i<3;i++){let h=document.createElement('img');h.src='assets/Hearticcus.png';h.alt=i<lives?'life':'lost life';h.style.opacity=i<lives?'1':'.2';$('hearts').append(h)}}
+function begin(){audioStart();mode='playing';$('menu').style.display='none';$('pause').style.display='none';$('hud').style.display='flex';elapsed=score=cheese=0;lives=3;items=[];texts=[];bits=[];spawn=.5;shadow=rand(6,9);warning=human=false;hAge=0;slow=shield=invuln=0;rat.x=W/2;rat.vx=0;status('Shift started. Benefits include one (1) crumb.');hud()}
+function menu(over=false){
+  mode=over?'over':'menu';
+  $('hud').style.display='none';
+  $('pause').style.display='none';
+  $('menu').style.display='flex';
+
+  $('menu').style.backgroundImage=over
+    ? 'url("assets/deathscreen.png")'
+    : 'url("assets/menu.png")';
+
+  
+
+  $('subtitle').textContent=over
+    ? `Score: ${Math.floor(score).toLocaleString()} · Cheese: ${cheese} · Best: ${best.toLocaleString()}. Your mom would be medium proud.`
+    : '';
+
+  $('start').textContent=over?'Try another shift':'Start your shift';
+}
+function pause(){if(mode==='playing'){mode='paused';$('pause').style.display='flex'}else if(mode==='paused'){mode='playing';$('pause').style.display='none'}}
+function finish(){mode='over';best=Math.max(best,Math.floor(score));localStorage.setItem('udrc-best',best);menu(true);beep(150,.25,'sawtooth')}
+function text(x,y,t,c='#49382b'){texts.push({x,y,t,c,life:1})}
+function spawnItem() {
+  const r = Math.random();
+  const type =
+    r < 0.17 ? 'mug' :
+    r < 0.27 ? 'black' :
+    r < 0.37 ? 'pen' :
+    r < 0.46 ? 'pencil' :
+    r < 0.56 ? 'clip' :
+    r < 0.65 ? 'red' :
+    r < 0.72 ? 'blue' :
+    r < 0.78 ? 'yellow' :
+    r < 0.85 ? 'cheese' :
+    r < 0.90 ? 'shield' :
+    r < 0.95 ? 'clock' :
+    'note';
+  const dims = {
+
+    mug: [
+      Math.min(110, W * 0.12),
+      Math.min(110, H * 0.17)
+    ],
+   
+    black: [84, 20],
+  
+    pen: [20, Math.min(78, H * 0.13)],
+    pencil: [Math.min(72, W * 0.10), Math.min(72, W * 0.10) * (25 / 48)],
+
+    clip: [31, 12],
+    red: [76, 44],
+    blue: [76, 44],
+    yellow: [76, 44],
+    cheese: [55, 48],
+  
+    shield: [40, 40],
+    clock: [36, 36],
+    note: [42, 35]
+  };
+  const d = dims[type];
+  items.push({
+    type,
+    x: rand(35, W - 35),
+
+    y: -(type === 'black' ? d[0] : d[1]),
+    w: d[0],
+    h: d[1],
+    vx: rand(-25, 25),
+    vy: rand(180, 250)
+      * (1 + Math.min(elapsed / 100, 1.3))
+      * (slow > 0 ? 0.55 : 1),
+
+    rot: type === 'black' ? Math.PI / 2 : rand(-0.5, 0.5),
+    vr: type === 'black' ? 0 : rand(-1.4, 1.4),
+    dead: false
+  });
+}
+function pr(){return{x:rat.x-rat.w*.3,y:rat.y-rat.h*.3,w:rat.w*.6,h:rat.h*.6}}function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
+function hurt(msg){if(shield){shield=0;text(rat.x,rat.y-40,'CLIPPIE SAVED YOU!','#477a50');return}lives--;invuln=1.2;status(msg);beep(170,.17,'sawtooth');for(let i=0;i<10;i++)bits.push({x:rat.x,y:rat.y,vx:rand(-140,140),vy:rand(-170,20),life:rand(.3,.7)});if(lives<=0)finish();hud()}
+function tick(dt){if(mode!=='playing')return;elapsed+=dt;score+=dt*(10+Math.min(elapsed*.25,35));invuln=Math.max(0,invuln-dt);slow=Math.max(0,slow-dt);shield=Math.max(0,shield-dt);let left=keys.ArrowLeft||keys.KeyA||touch.left,right=keys.ArrowRight||keys.KeyD||touch.right,freeze=keys.Space||touch.freeze;
+if(human){hAge+=dt;if(freeze){need-=dt;rat.vx*=Math.pow(.08,dt);if(need<=0){human=warning=false;shadow=rand(8,13);score+=80;text(rat.x,rat.y-rat.h/2,'SOOO NORMAL WEOWIEEE +80','#477a50');status('Human passed. You are now a sock. +80');beep(760,.08);beep(990,.12)}}else if(hAge>.2){hurt('You moved. The hooman saw a ratticus. Devastating for yourcheeises');human=warning=false;shadow=rand(7,11)}if(hAge>3.7&&human){human=warning=false;shadow=rand(8,12);status('False alarm. HR wanted a coffee break.');}}else{shadow-=dt;if(shadow<1.7&&!warning){warning=true;status('SHADOW! HOLD SPACE. BECOME ONE WITH THE DUSTs.');beep(400,.1,'square')}if(shadow<=0){human=true;hAge=0;need=rand(.9,1.4);warning=false;status('FREEZE. FREEZE. FREEZE.')}}
+let dir = (right ? 1 : 0) - (left ? 1 : 0);
+if (dir !== 0) rat.face = dir;
+rat.vx += dir * W * 0.95 * dt;rat.vx*=Math.pow(dir===0?.012:.18,dt);rat.x=clamp(rat.x+rat.vx*dt,rat.w*.48,W-rat.w*.48);spawn-=dt;if(spawn<=0){spawnItem();if(Math.random()<Math.min(.3,elapsed/150))spawnItem();spawn=Math.max(.34,1.03-elapsed*.004)*rand(.7,1.2)}
+let p=pr();for(let o of items){o.y+=o.vy*dt;o.x+=o.vx*dt;o.rot+=o.vr*dt;const boxW=o.type==='black'?o.h:o.w,boxH=o.type==='black'?o.w:o.h,b={x:o.x-boxW*.34,y:o.y-boxH*.32,w:boxW*.68,h:boxH*.64};if(!o.dead&&hit(p,b)){o.dead=true;if(o.type==='cheese'){cheese++;score+=125;text(o.x,o.y,'CHEESE +125','#a07819');status('Cheese acquired. Your tiny tummayyy is pleased.');beep(650,.08);beep(850,.12)}else if(['red','blue','yellow'].includes(o.type)){if(o.type==='red'){slow=6;status('Red candy: time is slowwww for six seconds.')}else if(o.type==='blue'){shield=7;status('Blue candy: you are bech bawl.')}else{score+=250;status('Yellow candy: sugar rush +250. WEEWEEEEEEE.')}score+=50;text(o.x,o.y,o.type==='red'?'SLOW-MO!':o.type==='blue'?'SHIELD!':'SUGAR RUSH +250','#477a50');beep(600,.1)}else if (o.type === 'clip') {
+  shield = 7;
+  score += 50;
+  text(o.x, o.y, 'PAPERCLIP ARMOUR!', '#477a50');
+  status('Paperclip shield equipped. pokiepokie.');
+}
+else if (o.type === 'shield') {
+  shield = 9;
+  score += 75;
+  text(o.x, o.y, 'SHIELD UP!', '#477a50');
+  status('Protected by the power of cheesie weeezy.');
+  beep(650, 0.12);
+}
+else if (o.type === 'clock') {
+  slow = 6;
+  score += 50;
+  text(o.x, o.y, 'TIME SLOWS!', '#477a50');
+  status('Time is blehhh for the next six seconds.');
+  beep(500, 0.12);
+}
+else if (shield) {
+  shield = 0;
+  text(o.x, o.y, 'BLOCKED!', '#477a50');
+}else if(invuln<=0)hurt(o.type==='mug'?'MUGSHOT.':o.type==='note'?'Paper cut. Emotionally and physically.':'That was mean.')}}
+items=items.filter(o=>!o.dead&&o.y<H+100);for(let f of texts){f.y-=25*dt;f.life-=dt}texts=texts.filter(f=>f.life>0);for(let b of bits){b.x+=b.vx*dt;b.y+=b.vy*dt;b.vy+=100*dt;b.life-=dt}bits=bits.filter(b=>b.life>0);if(Math.floor(elapsed)%13===0&&Math.floor(elapsed)!==Math.floor(elapsed-dt)){let q=['A mug has entered the chat.','HR calls this a growth opportunity.','You cannot expense emotional damage.','That pen had a family.','The desk economy is in shambles.','Tiny paws. Massive quarterly results.','Stapler said “catch these hands.”'];status(q[Math.floor(Math.random()*q.length)])}hud()}
+function bg(){
+
+  if (backgroundImage.complete && backgroundImage.naturalWidth > 0) {
+    const scale = Math.max(W / backgroundImage.naturalWidth, H / backgroundImage.naturalHeight);
+    const drawW = backgroundImage.naturalWidth * scale;
+    const drawH = backgroundImage.naturalHeight * scale;
+    ctx.drawImage(backgroundImage, (W - drawW) / 2, (H - drawH) / 2, drawW, drawH);
+    return;
+  }
+
+
+  ctx.fillStyle = '#f6e8c8';
+  ctx.fillRect(0, 0, W, H);
+  let dh = H * 0.17;
+  ctx.fillStyle = '#755036'; ctx.fillRect(0, 0, W, dh * 0.2);
+  ctx.fillStyle = '#bd8d5b'; ctx.fillRect(0, dh * 0.2, W, dh * 0.13);
+  ctx.fillStyle = '#d9b98a'; ctx.fillRect(0, dh * 0.33, W, dh * 0.035);
+  ctx.fillStyle = '#e7d4ad'; ctx.fillRect(0, H * 0.89, W, H * 0.11);
+}
+
+function shadowDraw(){if(!warning&&!human)return;if(warning){ctx.fillStyle='#44392b14';ctx.fillRect(0,0,W,H);ctx.fillStyle='#ffffff';ctx.textAlign='center';ctx.font=`900 ${Math.max(17,W*.025)}px "Patrick Hand", cursive`;ctx.fillText('uh oh. human-shaped weather.',W/2,H*.28)}if(human){ctx.fillStyle='#3c30294a';ctx.fillRect(0,0,W,H);ctx.fillStyle='#4b3d35a8';ctx.beginPath();ctx.ellipse(W*.18,10,W*.09,H*.045,0,0,7);ctx.ellipse(W*.82,12,W*.11,H*.05,0,0,7);ctx.fill();ctx.textAlign='center';ctx.fillStyle='#fff8e9';ctx.font=`900 ${Math.max(24,W*.04)}px "Patrick Hand", cursive`;ctx.fillText('HUMAN DETECTED',W/2,H*.30);ctx.font=`900 ${Math.max(13,W*.018)}px "Patrick Hand", cursive`;ctx.fillText('HOLD SPACE. DO NOT BE A RAT ABOUT THIS.',W/2,H*.35);let bw=Math.min(340,W*.55);ctx.fillStyle='#fff8e9';ctx.fillRect(W/2-bw/2,H*.39,bw,12);ctx.fillStyle='#d9564e';ctx.fillRect(W/2-bw/2,H*.39,bw*clamp(need/1.4,0,1),12)}}
+function draw(){bg();for(let o of items){let n = {
+  mug: 'cofficus.png',
+  black: 'pen_black.png',
+  pen: 'pen.png',
+  pencil: 'pencil.png',
+  clip: 'paperclip_green.png',
+  red: 'Candy_red.png',
+  blue: 'Candy_blue.png',
+  yellow: 'Candy_yellow.png',
+  cheese: 'cheesicus.png',
+  note: 'sticky_note.png',
+  shield: 'shield.png',
+  clock: 'clock.png'
+}[o.type];drawImg(n,o.x,o.y,o.w,o.h,o.rot)}if(shield){ctx.strokeStyle='#477a50';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(rat.x,rat.y,rat.w*.58,rat.h*.53,0,0,7);ctx.stroke()}if (invuln <= 0 || Math.floor(invuln * 12) % 2 === 0) {
+  drawImg(
+    'ratticus.png',
+    rat.x,
+    rat.y,
+    rat.w,
+    rat.h,
+    0,
+    rat.face > 0
+  );
+}for(let f of texts){ctx.globalAlpha=clamp(f.life,0,1);ctx.fillStyle=f.c;ctx.textAlign='center';ctx.font=`900 ${Math.max(13,W*.017)}px "Patrick Hand", cursive`;ctx.fillText(f.t,f.x,f.y)}ctx.globalAlpha=1;for(let b of bits){ctx.globalAlpha=clamp(b.life*2,0,1);ctx.fillStyle='#d9564e';ctx.beginPath();ctx.arc(b.x,b.y,4,0,7);ctx.fill()}ctx.globalAlpha=1;shadowDraw()}
+function frame(t){let dt=Math.min(.033,(t-last)/1000||0);last=t;if(mode==='playing')tick(dt);draw();requestAnimationFrame(frame)}
+addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();if(e.code==='Enter'&&mode==='menu'){begin();return}if(e.code==='KeyP'){pause();return}keys[e.code]=true;if(mode==='menu'&&['ArrowLeft','ArrowRight','KeyA','KeyD','Space'].includes(e.code))begin()});addEventListener('keyup',e=>keys[e.code]=false);addEventListener('blur',()=>{keys={};touch={left:false,right:false,freeze:false}});
+function hold(id,key){let el=$(id);el.addEventListener('pointerdown',e=>{e.preventDefault();touch[key]=true;if(mode==='menu')begin()});['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,e=>{e.preventDefault();touch[key]=false}))}hold('left','left');hold('right','right');hold('freeze','freeze');
+$('start').onclick=begin;$('resume').onclick=pause;$('toMenu').onclick=()=>menu(false);$('sound').onclick=()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'♫ Sound on':'♫ Sound off';if(soundOn)audioStart();if (master) master.gain.value = soundOn ? 0.45 : 0;};
+resize();hud();requestAnimationFrame(frame);
+})();</script></body></html>
